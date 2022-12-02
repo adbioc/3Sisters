@@ -1,0 +1,23 @@
+# Preface {.unnumbered}
+
+
+This is a  book of three languages  Python R and Julia. The book is written in a versatile platform *Quarto* <https://quarto.org/docs/books>. The compilation of the book is done in the open source platform *Vstool* <https://visualstudio.microsoft.com/downloads/>. 
+The book is meant for chemists physicists biologists medical scientists and environment modellers  and all those who want to communicate with the computer and compose reproducible code to solve their own problems. Instead of getting into what language suits , my basic contention in this book is to have a comparative appraisal of the three sister languages.  In some cases we use the same end problem to highlight the difference in approaches in the three languages.  
+Typically the industry looks for modellers who deal with specific engineering and financial models. The examples given in a typical language based lecture often deal with problems related to such "industry-friendly" problems. For a change, I thought it will be interesting to start with problems that are simple but domain knowledge based. The person dealing with bank will understand the market based examples with ease.  A chemist on the other hand would communicate more if the computational problem is related to chemistry. Often teh computational treatises in science (STEM) become specialised, e.g., molecular modelling problem. We have made a choice to restrict ourselves to problems which are simple intuitive and the coding or composing can provide us some additional insight. 
+Long back I found a book in which there was a mixed language problem solving approach using Matlab, Maple and Mathematica (@moller2007optics). But the sister languages we have used (Python R and Julia)  are used in more trendy applications like data science, AI and genomics research. 
+A challenging task in this book will be to restrict ourselves to a limited space so that the basic purpose namely, the problem solving aptitude is retained. I hope we will be able to satisfy the reader who we assume will typically a researcher or a scientist with a curious mind or even a undergraduate student  with some keen interest in computational problems and  how they are solved using different language platforms. 
+
+
+| Language      | Time (ms) | 
+| :---        |    :----:   |  
+| Python     |   9.8          |
+| R          |  9.5     | 
+| Julia         | 4.0      | 
+: *Time elapsed (ms) for  100000 iterations with floating point variables*
+
+
+The Table 1 also highlights the "Two Language Problem" . High level langages are often goof in testing ideas, whereas, the low level languages often perform better but are lesser communicable to a random user. Julia as seen in the Table 1, serve the bindings of the low-level code to high-level version. Typically, Julia may nor be as fast as C++ or Fortran but is faster than the two sister counterparts R and Python. Interestingly, in the example above R is marginally faster than python, but the execution time differences are often dependent on the loop size. 
+
+
+
+

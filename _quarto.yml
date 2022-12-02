@@ -1,0 +1,32 @@
+project:
+  type: book
+book:
+  title: "A Tale of three sisters Julia R and Python"
+  author: "Anjan Kr Dasgupta"
+  cover-image: 3sisters.png
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - chart_graphviz.qmd
+    - Pylib.qmd
+    - Rlib.qmd
+    - juliastruct.qmd
+    - summary.qmd
+    - references.qmd
+  
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
+

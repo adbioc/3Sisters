@@ -1,0 +1,517 @@
+
+::: {#py}
+:::
+# Python 
+
+```{python}
+import numpy as np 
+#from numpy import arange
+import matplotlib.pyplot as plt
+from matplotlib import pyplot
+
+import time
+import matplotlib_venn as vn 
+import pandas  as pd
+from pandas import read_csv
+import scipy  as scipy
+from scipy.optimize import curve_fit
+import datetime as dt
+# import maya
+
+```
+
+
+## Loop time in python 
+```{python}
+start=time.time()
+sum=0
+for i in range(100000):
+    sum=sum+0.001
+time.time()-start
+```
+
+##  Amino acids and nucleic acids as Python Lists 
+
+```{python}
+amino_all=['GAVLIPFYWSTNQCMDEHKR']
+amino_all
+```
+
+    ['GAVLIPFYWSTNQCMDEHKR']
+
+## Amino acids and nucleic acids as mathematical sets
+
+We can use python to express the set of all amino acids.In formal terms this can be expressed as </p>
+
+\begin{equation}
+\{G,A,V,L,I,P,F,Y,W,S,T,N,Q,C,M,D,E,H,K,R\}= amino\_all
+\end{equation}
+
+Similarly,we can express the set of all nucleic acids participating in formation of DNA as:
+
+\begin{equation}
+\{A,G,C,T\}= nuc
+\end{equation}
+
+
+
+Now let us for simplicity we express the set of amino acid and its subsets by 
+
+
+## Amino acids as python sets
+
+```{python}
+plt.rcParams.update({'font.size': 8})
+amino_all = set(['G','A','V','L','I',
+'P','F','Y','W','S','T','N','Q','C','M',
+'D','E','H','K','R'])
+```
+
+## Amino acid set as an object 
+
+```{python}
+class amino:
+  def __init__(self,sequence):
+    self.name = name
+    self.sequence = sequence
+```
+
+```{python}
+amino.all='GAVLIPFYWSTNQCMDEHKR'
+amino.polar='NQSTKRHDECY'
+amino.Hbond='CWNQSTYKRHDE'
+amino.S='CM'
+amino.positive='KRH'
+amino.negative='DEC'
+amino.aromatic='FWYH'
+amino.aliphatic='GAVLIP'
+amino.dilsul='C'
+amino.cyclic='P'
+amino.amphiphatic='WYM'
+amino.hydrophobic='AILMFVPG'
+```
+
+
+```{python}
+# print one of the objects 
+print(amino.positive)
+
+```
+
+
+
+## Cardianility of the amino acid set 
+
+
+
+```{python}
+len(amino.all)
+```
+
+
+
+
+
+```{python}
+#!pip install matplotlib_venn
+```
+
+
+```{python}
+from matplotlib_venn import venn2, venn2_circles, venn2_unweighted
+from matplotlib_venn import venn3, venn3_circles
+from matplotlib import pyplot as plt
+vd3=venn3([set(amino.positive),set(amino.polar),set(amino.aliphatic)],
+set_labels=('Positive', 'Polar','Aliphatic'),
+set_colors=('#e377c2', '#7f7f7f', '#bcbd22'),
+alpha = 0.8)
+plt.show()
+```
+
+
+    
+    
+
+
+## Inference
+- None of the aliphatic amino acids are positive or polar
+- While this may sound trivial, let us ask whether how many nonpolar amino acids show hydrogen bonding.
+- We can solve it by 
+    - Venn Diagram 
+    - By simple set manipulation
+
+## Deriving the set of nonpolar amino acids
+
+
+```{python}
+# Finding the set of nonpolar amino acids 
+
+N=set(amino.all)-set(amino.polar)
+
+```
+
+
+```{python}
+N
+```
+
+
+
+
+
+```python
+N.intersection(set(amino.Hbond))
+```
+
+
+
+
+
+
+```{python}
+vd2=venn2([N,set(amino.Hbond)],
+set_labels=('nonpolar', 'Hbond'),
+set_colors=('#e377c2', '#7f7f7f'),
+alpha = 0.6)
+```
+
+
+    
+    
+
+
+## Inference
+Trp (w) is the only nonpolar amino acid showing hydrogen bonding properties 
+
+
+```{python}
+result = set(amino.Hbond).intersection(set(amino.amphiphatic))
+print(result)# Should be a finite set
+```
+
+
+
+## Inference 
+Among the ampipathic amino acids which are also hydrogen bonded. Turns out to be tyrosine and tryptophan,both being aromatic. 
+
+
+```{python}
+vd2=venn2([set(amino.Hbond),set(amino.amphiphatic)],
+ set_labels=('Hbond', 'amphiphatic'),
+ set_colors=('#e377c2', '#7f7f7f'),
+ alpha = 0.8)
+plt.show()
+
+```
+
+    
+
+## Another simple amino-set problem 
+How many aromatic amino acids exist other than the ampipathic and Hbonded?
+
+
+```{python}
+nonH=set(amino.aromatic)- (set(amino.Hbond).intersection(set(amino.amphiphatic)))
+nonH
+```
+
+
+
+
+
+## A problem on disulfide bridges 
+How to find an amino acid containing sulfur that does not form di-sulfide bridges
+
+## Solution - Compare the two sets amino.S  and amino.disul
+
+```{python}
+result = set(amino.S)-set(amino.dilsul)
+print(result)
+```
+
+
+## Comments on the above
+The implication of the above is that the singular amino acid C is responsible for the dsulphide bridge formation although there are two amino acids C and M containing S. 
+
+## A structural insight from the python based set theoretic analysis
+Structurally, it may be interesting to ask why M does not play a role in the disulphide bridge formation. Cysteine doesn't have any methyl group linked to its sulfur. It has a sulfhydryl group. This group is very reactive and can react with another cysteine to form a dimer, which is called cystine.
+Methionine is not only larger, but it has a large methyl group attached to sulfur. This not only reduces the reactivity, but it also causes molecular hindrance in real time,called steric hindrance.
+This is the basic reason why cysteine can dimerize, but methionine cannot.
+But cysteine can form a disulfide bridge with other sulfur containing AA such as methione as well.
+
+
+<!-- ## Python chemical structure as SMILE list -->
+
+<!-- If we go to PUBCHEM and perform compound search using a query string 'B12' we get a compound ID (cid) and also get a SMILE string:\small { -->
+<!-- **CC1=CC2=C(C=C1C)N(C=N2)C3C(C(C(O3)CO)OP(=O)([O-])OC(C)CNC(=O)CCC4(C(C5C6(C(C(C(=C(C7=NC(=CC8=NC(=C(C4=N5)C)C(C8(C)C)CCC(=O)N)C(C7(C)CC(=O)N)CCC(=O)N)C)[N-]6)CCC(=O)N)(C)CC(=O)N)C)CC(=O)N)C)O.[C-]#N.[Co+3]**} -->
+
+
+
+
+
+<!-- ```{python} -->
+<!-- from IPython.display import Image -->
+<!-- Image(url='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/44176380/record/PNG?image_size=300x300') -->
+<!-- ``` -->
+
+
+## String Examples
+```{python}
+'TATA' in 'TATATATATATATATATATATATA'
+```
+    
+```{python}
+'aaa' + 'ccc' + 'ttt' + 'ggg'
+```
+    
+
+```{python}
+'TA' * 12
+```
+
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[0]
+```
+    
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[-5]
+```
+    
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[1:4]
+```
+
+
+
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[4:-1]
+```
+
+    
+```{python}
+
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[-5:-4]
+```
+    
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[-1: :-1]
+```
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[:8]
+```
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[9:]
+```
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[9:-1]
+```
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[:]
+```
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[16:0:-4]
+```
+    
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'[16::-4]
+```
+    
+```{python}
+len('MNKMDLVADVAEKTDLSKAKATEVIDAVFA')
+```
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'.find('DL')
+```
+    
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'.find('DL', 5)# find DL after the 6th position
+```
+    
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'.find('DL', 5, 12)
+```
+    
+
+```{python}
+'MNKMDLVADVAEKTDLSKAKATEVIDAVFA'.startswith('DL')
+```
+
+```{python}
+
+'AAAAATCCCGAGGCGGCTATATAGGGCTCCGGAGGCGTAATATAAAA'.find('TCCGGA')
+```
+
+```{python}
+first="Anjan"
+last="Dasgupta"
+print(first[-1: :-1],last[-1: :-1])
+```
+
+
+## List Comprehension
+
+```{python}
+S = [x**2 for x in range(10)]
+V = [2**i for i in range(13)]
+M = [x for x in S if x % 2 == 0]
+print(S,"\n",V,"\n",M)
+```
+
+
+## Reading CSV files ( IoT Data)
+
+<
+
+```{python}
+
+# df1=pd.read_csv('nov_15_22_1.csv')
+df1=pd.read_csv('nov_15_22_2.csv')
+df2=pd.read_csv('nov_21_22_1.csv')
+df3=pd.read_csv('nov_25_22.csv')
+# def to_sec(x):
+#     return int(x[0]) * 3600 + int(x[1]) * 60 + int(x[2])
+
+df2.iloc[:,0]=[int(round(dt.datetime.strptime(i[:-6], '%Y-%m-%dT%H:%M:%S').timestamp())) for i in df2.iloc[:,0]]
+df1.iloc[:,0]=[int(round(dt.datetime.strptime(i[:-6], '%Y-%m-%dT%H:%M:%S').timestamp())) for i in df1.iloc[:,0]]
+df3.iloc[:,0]=[int(round(dt.datetime.strptime(i[:-6], '%Y-%m-%dT%H:%M:%S').timestamp())) for i in df3.iloc[:,0]]
+t1=df1.iloc[:,0]
+t2=df2.iloc[:,0]
+t3=df3.iloc[:,0]
+humid1=df1['humidity value']
+humid21=df2['field1']
+humid22=df2['field2']
+humid3=df3['Node2']
+plt.plot(t1[1000:]-t1[0],humid1[1000:])
+plt.show()
+plt.figure()
+plt.plot(t2-t2[0],humid21)
+plt.show()
+plt.figure()
+plt.plot(t2-t2[0],humid22)
+plt.show()
+
+
+
+```
+
+## Curve fitting in python 
+https://machinelearningmastery.com/curve-fitting-with-python/>
+
+```{python}
+def func(x, q,a, b, c):
+    return a * np.exp(-b * x) + c * np.exp(-q * x)
+def scale(x, out_range=(0, 1)):
+    domain = np.min(x), np.max(x)
+    y = (x - (domain[1] + domain[0]) / 2) / (domain[1] - domain[0])
+    return y * (out_range[1] - out_range[0]) + (out_range[1] + out_range[0]) / 2
+
+```
+
+
+
+
+```{python} 
+xdata= (t1[1000:]-t1[0])/max(t1)
+x = np.array(xdata.values.tolist())
+ydata=humid1[1000:]
+y=np.array(ydata.values.tolist())
+```
+
+```{python}
+
+type(x)
+type(y)
+x=scale(x)
+y=scale(y)
+#plt.plot(x,y)
+#plt.show()
+popt, _ = curve_fit(func, x, y)
+q,a,b,c=popt
+#pyplot.scatter(x, y)
+plt.plot(x, y, c='green', lw=10, alpha=0.3, label="Lighten")
+x_line = np.arange(min(x), max(x), 0.01)
+y_line = func(x_line, q,a, b, c)
+pyplot.plot(x_line, y_line, '--', color='red')
+pyplot.show()
+print("a * np.exp(-b * x) + c * np.exp(-q * x)","\n")
+print(['q','a','b','c'],"\n")
+print(popt)
+
+```
+
+
+```{python}
+
+xdata= (t2-t2[0])/max(t2)
+x = np.array(xdata.values.tolist())
+ydata=humid21
+y=np.array(ydata.values.tolist())
+
+y=np.array(ydata.values.tolist())
+x=scale(x)
+y=scale(y)
+#plt.plot(x,y)
+#plt.show()
+popt2, _ = curve_fit(func, x, y)
+q,a,b,c=popt2
+#pyplot.scatter(x, y)
+plt.plot(x, y, c='green', lw=10, alpha=0.3, label="Lighten")
+x_line = np.arange(min(x), max(x), 0.01)
+y_line = func(x_line, q,a, b, c)
+pyplot.plot(x_line, y_line, '--', color='red')
+pyplot.show()
+print("a * np.exp(-b * x) + c * np.exp(-q * x)","\n")
+
+print(['q','a','b','c'],"\n")
+
+
+print(popt2)
+
+```
+
+
+```{python}
+
+xdata= (t2-t2[0])/max(t2)
+x = np.array(xdata.values.tolist())
+ydata=humid22
+y=np.array(ydata.values.tolist())
+
+y=np.array(ydata.values.tolist())
+x=scale(x)
+y=scale(y)
+#plt.plot(x,y)
+#plt.show()
+popt3, _ = curve_fit(func, x, y)
+q,a,b,c=popt3
+#pyplot.scatter(x, y)
+plt.plot(x, y, c='green', lw=10, alpha=0.3, label="Lighten")
+x_line = np.arange(min(x), max(x), 0.01)
+y_line = func(x_line, q,a, b, c)
+pyplot.plot(x_line, y_line, '--', color='red')
+pyplot.show()
+print("a * np.exp(-b * x) + c * np.exp(-q * x)","\n")
+
+print(['q','a','b','c'],"\n")
+
+
+print(popt3)
+
+```
+
+
+
+

@@ -1,0 +1,149 @@
+# Julia 
+
+::: {#julia}
+:::
+
+
+
+## Loop time in Julia 
+
+```{julia}
+sum=0
+@time for i in 1:100000 ; sum+=0.001;end;
+
+```
+
+
+## Polynomials in Julia
+```{julia}
+using Polynomials
+Polynomial([1,2,3], :s)
+
+```
+
+### Construct Polynomial from Roots
+```{julia}
+using Polynomials
+fromroots([1,2,3]) # (x-1)*(x-2)*(x-3)
+```
+
+
+
+
+### Evaluate polynomial from roots 
+```{julia}
+p = Polynomial([1, 0, -1]);
+p(0.1)
+
+```
+
+
+
+
+### Curve Fitting 
+
+```{julia}
+using PyPlot
+using CurveFit
+
+U = 1.0:20.0
+E = @. sqrt(2 + 1 * U ^ 0.45) + randn()/60
+e = range(minimum(E), maximum(E), length=50)
+
+f1 = curve_fit(KingFit, E, U)
+# see httpsf2://juliahub.com/ui/Packages/CurveFit/yfYeb/0.3.2  for explanation of kingfit 
+
+U1 = f1.(e)
+
+f2 = curve_fit(Polynomial, E, U, 5)
+U2 = f2.(e)
+
+
+
+plot(U, E, "o", U1, e, "r-", U2, e, "g-", linewidth=3)
+```
+
+
+
+
+
+
+
+
+## Structure in Julia
+```{julia}
+struct Person
+    name::String
+    age::Int64
+end
+
+me = Person("Anjan", 34)
+
+
+typeof(me)
+
+me.name
+
+
+
+fieldnames(Person)
+fieldtypes(Person)
+
+# mutable structs
+
+mutable struct MutablePerson
+    name::String
+    age::Int64
+end
+
+jose_mutable = MutablePerson("Jose", 34)
+
+jose_mutable.name = "José"
+jose_mutable.age = 35
+
+jose_mutable
+
+function newborn!(x::MutablePerson)
+    x.age = 0
+end
+
+newborn!(jose_mutable)
+
+jose_mutable
+
+
+
+# abstract types
+
+abstract type Pet end
+
+struct Dog <: Pet end
+
+struct Cat <: Pet end
+
+function encounter(x::Pet, y::Pet)
+    return "fallback"
+end
+
+function encounter(x::Dog, y::Cat)
+    return "Oh, there's a chase"
+end
+
+function encounter(x::Cat, y::Dog)
+    return "Oh, there's hissing"
+end
+
+rex = Dog()
+meow = Cat()
+
+encounter(rex, meow)
+encounter(meow, rex)
+
+struct Giraffe <: Pet end
+
+godfried = Giraffe()
+
+encounter(rex, godfried)
+```
+
+
